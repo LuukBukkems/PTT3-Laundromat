@@ -1,11 +1,13 @@
 #include "Program.h";
 #include <Arduino.h>;
 
-Program::Program()
+Program::Program(HardwareProvider * hardware)
 {
  FirstStep = NULL;
  CurrentStep = FirstStep;
  Timer = new MyTimer();
+ Hardware = hardware;
+ Serial.flush();
 }
 
 Step * Program::GetCurrentStep()
@@ -13,12 +15,20 @@ Step * Program::GetCurrentStep()
   return CurrentStep;
 }
 
-void Program::SetNextStep()
+bool Program::SetNextStep()
 {
-  if(CurrentStep != NULL)
+  if(CurrentStep == NULL)
+  {
+    return false;
+  }
+
+  if(CurrentStep->getNext() != NULL)
   {
     CurrentStep = CurrentStep->getNext();
+    return true;
   }
+  
+  return false;
 }
 
 int Program::GetNrOfSteps()
@@ -31,6 +41,25 @@ int Program::GetNrOfSteps()
     TempStep = TempStep->getNext();
   }
   return Count;
+}
+
+void Program::AddStep(int StepTime, StepType Type)
+{
+  Serial.println("AddStep");
+  
+  Step * S = new Step(Hardware, Type, StepTime);
+  if(FirstStep == NULL)
+  {
+    FirstStep = S;
+    CurrentStep = FirstStep;
+    Serial.println(GetNrOfSteps());
+    return;
+  } 
+
+  Serial.println("NotFirstStep");
+  CurrentStep->setNext(S);
+  CurrentStep = CurrentStep->getNext();
+  Serial.println(GetNrOfSteps());
 }
 
 void Program::Start()
@@ -49,8 +78,11 @@ void Program::Start()
     }
     
     CurrentStep = CurrentStep->getNext();
+    Serial.println("GoNextStep");
     
   }
+
+  Serial.println("Done");
 }
 
 

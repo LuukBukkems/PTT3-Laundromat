@@ -12,8 +12,7 @@ class LaundryMachine : public Machine
   public:
   LaundryMachine();
   void Run(Program * selectedProgram);
-  void Test();
-
+  
   private:
   Program * SelectedProgram;
 };

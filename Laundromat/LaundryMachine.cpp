@@ -11,10 +11,5 @@ void LaundryMachine::Run(Program * selectedProgram)
   selectedProgram->Start();
 }
 
-void LaundryMachine::Test()
-{
-  Serial.println("asd");
-}
-
 
 

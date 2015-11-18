@@ -1,6 +1,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+#include <Arduino.h>;
 #include <stddef.h>
 
 #include "Step.h"
@@ -9,16 +10,18 @@
 class Program
 {
   public:
-  Program();
+  Program(HardwareProvider * hardware);
   Step * GetCurrentStep();
-  void SetNextStep();
+  bool SetNextStep();
   int GetNrOfSteps();
+  void AddStep(int StepTime, StepType Type);
   void Start();
 
   private:
   Step * CurrentStep;
   Step * FirstStep;
   MyTimer * Timer;
+  HardwareProvider * Hardware;
 };
 
 #endif

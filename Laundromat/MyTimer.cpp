@@ -8,6 +8,9 @@ bool MyTimer::PollTimer()
 {
   if(millis() >= EndingTime)
   {
+    Serial.println(StartingTime);
+    Serial.println(EndingTime);
+    Serial.println(EndingTime - StartingTime);
     return true;
   }
   return false;

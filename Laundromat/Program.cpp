@@ -45,32 +45,30 @@ int Program::GetNrOfSteps()
 
 void Program::AddStep(int StepTime, StepType Type)
 {
-  Serial.println("AddStep");
-  
+
   Step * S = new Step(Hardware, Type, StepTime);
   if(FirstStep == NULL)
   {
     FirstStep = S;
     CurrentStep = FirstStep;
-    Serial.println(GetNrOfSteps());
     return;
   } 
-
-  Serial.println("NotFirstStep");
   CurrentStep->setNext(S);
   CurrentStep = CurrentStep->getNext();
-  Serial.println(GetNrOfSteps());
+
 }
 
 void Program::Start()
 {
   CurrentStep = FirstStep;
+  Serial.println(GetNrOfSteps());
+  int Counter = 1;
 
   while(CurrentStep != NULL)
   {
-    Timer->NewTimer(CurrentStep->getTime());
-
     CurrentStep->executeStep();
+        
+    Timer->NewTimer(CurrentStep->getTime());
 
     while(!Timer->PollTimer())
     {
@@ -78,10 +76,11 @@ void Program::Start()
     }
     
     CurrentStep = CurrentStep->getNext();
-    Serial.println("GoNextStep");
     
+    Serial.print("Last Step was : ");
+    Serial.println(Counter++);
+     
   }
-
   Serial.println("Done");
 }
 

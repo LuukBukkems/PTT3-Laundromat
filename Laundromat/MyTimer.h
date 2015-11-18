@@ -12,8 +12,8 @@ class MyTimer
   void NewTimer(int Time);
 
   private:
-  int StartingTime;
-  int EndingTime;
+  unsigned long StartingTime;
+  unsigned long EndingTime;
 };
 
 #endif

@@ -8,8 +8,7 @@ bool MyTimer::PollTimer()
 {
   if(millis() >= EndingTime)
   {
-    Serial.println(StartingTime);
-    Serial.println(EndingTime);
+    Serial.print("Step time used : ");
     Serial.println(EndingTime - StartingTime);
     return true;
   }

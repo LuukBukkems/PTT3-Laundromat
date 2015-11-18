@@ -1,6 +1,9 @@
 #ifndef HARDWAREPROVIDER_H
 #define HARDWAREPROVIDER_H
 
+#include "Wire.h"
+#include "Centipede.h"
+
 typedef enum StepType
 {
   STEP_PROGRAM_END,
@@ -32,10 +35,10 @@ typedef enum StepType
   STEP_LOCK_OFF
 };
 
-class HardwareProvider
+class HardwareProvider 
 {
   public:
-  HardwareProvider();
+  HardwareProvider(Centipede * cs);
 
   void Fill(int State);
   void Heat(int State);
@@ -47,7 +50,7 @@ class HardwareProvider
   void EndProgram();
   
   private:
-  
+    Centipede * CS;
 };
 
 #endif

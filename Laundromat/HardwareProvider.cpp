@@ -1,6 +1,3 @@
-#include "Wire.h"
-#include "Centipede.h"
-
 #include "HardwareProvider.h"
 
 #define OUT_GROUP2      0
@@ -28,34 +25,31 @@
 #define IN_IN1          22
 #define IN_IN0          23
 
-Centipede CS;
 
-HardwareProvider::HardwareProvider()
+HardwareProvider::HardwareProvider(Centipede*  cs)
 {
-  Wire.begin();
-    
-  CS.initialize();
+  CS = cs;
 
-    for (int i = 0; i <= 15; i++) 
+   for (int i = 0; i <= 15; i++) 
   {
-    CS.pinMode(i, OUTPUT);
+    CS->pinMode(i, OUTPUT);
   }
-  CS.digitalWrite(OUT_GROUP2, LOW);
-  CS.digitalWrite(OUT_GROUP1, LOW);
-  CS.digitalWrite(OUT_STROBE, LOW);
-  CS.digitalWrite(OUT_KEYSELECT, HIGH);
-  CS.digitalWrite(OUT_BUZZER, HIGH);
-  CS.digitalWrite(OUT_HEATER, HIGH);
-  CS.digitalWrite(OUT_SPEED2, HIGH);
-  CS.digitalWrite(OUT_SPEED1, HIGH);
-  CS.digitalWrite(OUT_DATAC, LOW);
-  CS.digitalWrite(OUT_DATAB, LOW);
-  CS.digitalWrite(OUT_DATAA, LOW);
-  CS.digitalWrite(OUT_MOTOR_RL, LOW);
-  CS.digitalWrite(OUT_SOAP1, LOW);
-  CS.digitalWrite(OUT_SINK, LOW);
-  CS.digitalWrite(OUT_DRAIN, LOW);
-  CS.digitalWrite(OUT_LOCK, LOW);
+  CS->digitalWrite(OUT_GROUP2, LOW);
+  CS->digitalWrite(OUT_GROUP1, LOW);
+  CS->digitalWrite(OUT_STROBE, LOW);
+  CS->digitalWrite(OUT_KEYSELECT, HIGH);
+  CS->digitalWrite(OUT_BUZZER, HIGH);
+  CS->digitalWrite(OUT_HEATER, HIGH);
+  CS->digitalWrite(OUT_SPEED2, HIGH);
+  CS->digitalWrite(OUT_SPEED1, HIGH);
+  CS->digitalWrite(OUT_DATAC, LOW);
+  CS->digitalWrite(OUT_DATAB, LOW);
+  CS->digitalWrite(OUT_DATAA, LOW);
+  CS->digitalWrite(OUT_MOTOR_RL, LOW);
+  CS->digitalWrite(OUT_SOAP1, LOW);
+  CS->digitalWrite(OUT_SINK, LOW);
+  CS->digitalWrite(OUT_DRAIN, LOW);
+  CS->digitalWrite(OUT_LOCK, LOW);
 }
 
 //--------------------------------------------------------------------------------------------//
@@ -75,23 +69,23 @@ HardwareProvider::HardwareProvider()
     switch (State)
     {
       case 0:
-        CS.digitalWrite(OUT_SPEED1, LOW);
-        CS.digitalWrite(OUT_SPEED2, LOW);
+        CS->digitalWrite(OUT_SPEED1, LOW);
+        CS->digitalWrite(OUT_SPEED2, LOW);
       break;
 
       case 1:
-        CS.digitalWrite(OUT_SPEED1, HIGH);
-        CS.digitalWrite(OUT_SPEED2, LOW);
+        CS->digitalWrite(OUT_SPEED1, HIGH);
+        CS->digitalWrite(OUT_SPEED2, LOW);
       break;
 
       case 2:
-        CS.digitalWrite(OUT_SPEED1, LOW);
-        CS.digitalWrite(OUT_SPEED2, HIGH);
+        CS->digitalWrite(OUT_SPEED1, LOW);
+        CS->digitalWrite(OUT_SPEED2, HIGH);
       break;
 
       case 3:
-        CS.digitalWrite(OUT_SPEED1, HIGH);
-        CS.digitalWrite(OUT_SPEED2, HIGH);
+        CS->digitalWrite(OUT_SPEED1, HIGH);
+        CS->digitalWrite(OUT_SPEED2, HIGH);
       break;
     }
   }
@@ -101,11 +95,11 @@ HardwareProvider::HardwareProvider()
     switch (State)
     {
       case 0:
-        CS.digitalWrite(OUT_MOTOR_RL, LOW);
+        CS->digitalWrite(OUT_MOTOR_RL, LOW);
       break;
 
       case 1:
-        CS.digitalWrite(OUT_MOTOR_RL, HIGH);
+        CS->digitalWrite(OUT_MOTOR_RL, HIGH);
       break;
     }
   }
@@ -115,11 +109,11 @@ HardwareProvider::HardwareProvider()
         switch (State)
     {
       case 0:
-        CS.digitalWrite(OUT_DRAIN, LOW);
+        CS->digitalWrite(OUT_DRAIN, LOW);
       break;
 
       case 1:
-        CS.digitalWrite(OUT_DRAIN, HIGH);
+        CS->digitalWrite(OUT_DRAIN, HIGH);
       break;
     }
   }
@@ -129,11 +123,11 @@ HardwareProvider::HardwareProvider()
         switch (State)
     {
       case 0:
-        CS.digitalWrite(OUT_SINK, LOW);
+        CS->digitalWrite(OUT_SINK, LOW);
       break;
 
       case 1:
-        CS.digitalWrite(OUT_SINK, HIGH);
+        CS->digitalWrite(OUT_SINK, HIGH);
       break;
     }
   }
@@ -143,11 +137,11 @@ HardwareProvider::HardwareProvider()
        switch (State)
     {
       case 0:
-        CS.digitalWrite(OUT_LOCK, LOW);
+        CS->digitalWrite(OUT_LOCK, LOW);
       break;
 
       case 1:
-        CS.digitalWrite(OUT_LOCK, HIGH);
+        CS->digitalWrite(OUT_LOCK, HIGH);
       break;
     }
   }

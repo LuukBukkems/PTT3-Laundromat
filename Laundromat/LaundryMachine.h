@@ -2,7 +2,8 @@
 #define LAUNDRYMACHINE_H
 
 #include "Machine.h";
-#include "Program.h";
+
+class Program;
 
 class LaundryMachine : public Machine
 {

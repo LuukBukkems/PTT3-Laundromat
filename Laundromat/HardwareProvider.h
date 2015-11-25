@@ -1,8 +1,7 @@
 #ifndef HARDWAREPROVIDER_H
 #define HARDWAREPROVIDER_H
 
-#include "Wire.h"
-#include "Centipede.h"
+class Centipede;
 
 typedef enum StepType
 {

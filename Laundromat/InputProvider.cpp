@@ -1,7 +1,5 @@
-#include "Wire.h"
-#include "Centipede.h"
-
 #include "InputProvider.h"
+#include "Centipede.h"
 
 #define OUT_GROUP2      0
 #define OUT_GROUP1      1
@@ -28,10 +26,8 @@
 #define IN_IN1          22
 #define IN_IN0          23
 
-  InputProvider::InputProvider(Centipede * cs)
-  {
-    CS = cs;    
-  }
+  InputProvider::InputProvider(Centipede * cs): CS(cs)
+  { }
   
   void InputProvider::UpdateInput()
   {

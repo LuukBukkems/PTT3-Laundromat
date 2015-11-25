@@ -2,7 +2,8 @@
 #define PROGRAM_H
 
 #include "Step.h"
-#include "MyTimer.h"
+
+class MyTimer;
 
 class Program
 {

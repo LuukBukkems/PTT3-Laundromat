@@ -4,8 +4,7 @@
 #include <Arduino.h>
 
 MyTimer::MyTimer()
-{
-}
+{ }
 
 bool MyTimer::PollTimer()
 {

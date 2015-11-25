@@ -1,4 +1,5 @@
 #include "HardwareProvider.h"
+#include "Centipede.h"
 
 #define OUT_GROUP2      0
 #define OUT_GROUP1      1
@@ -26,10 +27,8 @@
 #define IN_IN0          23
 
 
-HardwareProvider::HardwareProvider(Centipede*  cs)
+HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
 {
-  CS = cs;
-
    for (int i = 0; i <= 15; i++) 
   {
     CS->pinMode(i, OUTPUT);

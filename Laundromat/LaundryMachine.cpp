@@ -1,12 +1,11 @@
 #include "LaundryMachine.h";
+#include "Program.h";
 
 #include <Arduino.h>;
 #include <stddef.h>
 
 LaundryMachine::LaundryMachine() : Machine()
-{
-  Serial.flush();
-}
+{ }
 
 void LaundryMachine::Run(Program * selectedProgram)
 {

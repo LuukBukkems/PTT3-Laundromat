@@ -1,12 +1,9 @@
 #include "Step.h";
 #include <stddef.h>
 
-Step::Step(HardwareProvider * hardware, StepType type, int MyTime)
+Step::Step(HardwareProvider * hardware, StepType type, int MyTime):Hardware(hardware), Type(type), Time(MyTime)
 {
   NextStep = NULL;
-  Hardware = hardware;
-  Type = type;
-  Time = MyTime;
 }
 
 Step * Step::GetNext()

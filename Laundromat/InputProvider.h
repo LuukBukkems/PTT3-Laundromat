@@ -1,6 +1,8 @@
 #ifndef INPUTPROVIDER_H
 #define INPUTPROVIDER_H
 
+class Centipede;
+
 class InputProvider
 {
   public:

@@ -1,15 +1,14 @@
 #include "Program.h";
+#include "MyTimer.h"
 
 #include <Arduino.h>;
 #include <stddef.h>
 
-Program::Program(HardwareProvider * hardware)
+Program::Program(HardwareProvider * hardware): Hardware(hardware) 
 {
  FirstStep = NULL;
  CurrentStep = FirstStep;
  Timer = new MyTimer();
- Hardware = hardware;
- Serial.flush();
 }
 
 Step * Program::GetCurrentStep()

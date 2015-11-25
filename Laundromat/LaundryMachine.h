@@ -1,9 +1,6 @@
 #ifndef LAUNDRYMACHINE_H
 #define LAUNDRYMACHINE_H
 
-#include <Arduino.h>;
-#include <stddef.h>
-
 #include "Machine.h";
 #include "Program.h";
 

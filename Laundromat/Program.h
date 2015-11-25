@@ -1,9 +1,6 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#include <Arduino.h>;
-#include <stddef.h>
-
 #include "Step.h"
 #include "MyTimer.h"
 

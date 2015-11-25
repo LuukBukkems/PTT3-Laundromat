@@ -1,5 +1,7 @@
 #include "Program.h";
+
 #include <Arduino.h>;
+#include <stddef.h>
 
 Program::Program(HardwareProvider * hardware)
 {
@@ -22,9 +24,9 @@ bool Program::SetNextStep()
     return false;
   }
 
-  if(CurrentStep->getNext() != NULL)
+  if(CurrentStep->GetNext() != NULL)
   {
-    CurrentStep = CurrentStep->getNext();
+    CurrentStep = CurrentStep->GetNext();
     return true;
   }
   
@@ -38,7 +40,7 @@ int Program::GetNrOfSteps()
   while(TempStep != NULL)
   {
     Count ++;
-    TempStep = TempStep->getNext();
+    TempStep = TempStep->GetNext();
   }
   return Count;
 }
@@ -53,8 +55,8 @@ void Program::AddStep(int StepTime, StepType Type)
     CurrentStep = FirstStep;
     return;
   } 
-  CurrentStep->setNext(S);
-  CurrentStep = CurrentStep->getNext();
+  CurrentStep->SetNext(S);
+  CurrentStep = CurrentStep->GetNext();
 
 }
 
@@ -66,16 +68,16 @@ void Program::Start()
 
   while(CurrentStep != NULL)
   {
-    CurrentStep->executeStep();
+    CurrentStep->ExecuteStep();
         
-    Timer->NewTimer(CurrentStep->getTime());
+    Timer->NewTimer(CurrentStep->GetTime());
 
     while(!Timer->PollTimer())
     {
       delay(10);
     }
     
-    CurrentStep = CurrentStep->getNext();
+    CurrentStep = CurrentStep->GetNext();
     
     Serial.print("Last Step was : ");
     Serial.println(Counter++);

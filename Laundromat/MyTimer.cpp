@@ -1,5 +1,8 @@
 #include "MyTimer.h";
 
+#include <stddef.h>
+#include <Arduino.h>
+
 MyTimer::MyTimer()
 {
 }

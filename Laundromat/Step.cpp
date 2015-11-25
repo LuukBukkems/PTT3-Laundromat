@@ -1,4 +1,5 @@
 #include "Step.h";
+#include <stddef.h>
 
 Step::Step(HardwareProvider * hardware, StepType type, int MyTime)
 {
@@ -8,22 +9,22 @@ Step::Step(HardwareProvider * hardware, StepType type, int MyTime)
   Time = MyTime;
 }
 
-Step * Step::getNext()
+Step * Step::GetNext()
 {
   return NextStep;
 }
 
-void Step::setNext(Step * nextStep)
+void Step::SetNext(Step * nextStep)
 {
     NextStep = nextStep;
 }
 
-int Step::getTime()
+int Step::GetTime()
 {
   return Time;
 }
 
-void Step::executeStep()
+void Step::ExecuteStep()
 {
     switch(Type)
     {

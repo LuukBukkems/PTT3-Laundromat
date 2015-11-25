@@ -1,8 +1,6 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
-#include <stddef.h>
-
 #include "Program.h";
 
 class Machine

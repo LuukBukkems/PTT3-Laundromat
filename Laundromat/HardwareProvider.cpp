@@ -150,6 +150,42 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
     Sink(0);
     Drain(0);
     Speed(3);
+    HandleSoap(0,1);
+    HandleSoap(0,2);
+    Lock(0);
+  }
+
+  void HardwareProvider::HandleSoap(int State, int Soap)
+  {
+    if(Soap == 1)
+    {
+      CS->digitalWrite(OUT_SOAP1, State);
+    }
+    
+    else if(Soap == 2)
+    {
+      MultiplexOUT(false,true,false,false,State);
+    }
   }
   
+  void HardwareProvider::MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC)
+  {
+    CS->digitalWrite(OUT_STROBE,LOW);
+  
+    CS->digitalWrite(OUT_GROUP2,GROUP2);
+    CS->digitalWrite(OUT_GROUP1,GROUP1);
+    
+    CS->digitalWrite(OUT_DATAA,DATAA);
+    CS->digitalWrite(OUT_DATAB,DATAB);
+    CS->digitalWrite(OUT_DATAC,DATAC);
+    
+    delay(80);
+    CS->digitalWrite(OUT_STROBE,HIGH);
+    delay(80);
+  }
+
+
+
+
+
 

@@ -9,6 +9,7 @@ class InputProvider
   InputProvider(Centipede *cs);
   
   void UpdateInput();
+  bool GetLock();
   
   private:
 

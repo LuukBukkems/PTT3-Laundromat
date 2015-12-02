@@ -31,7 +31,12 @@ typedef enum StepType
   STEP_SINK_OFF,
 
   STEP_LOCK_ON,
-  STEP_LOCK_OFF
+  STEP_LOCK_OFF,
+
+  STEP_SOAP_1_ON,
+  STEP_SOAP_1_OFF,
+  STEP_SOAP_2_ON,
+  STEP_SOAP_2_OFF
 };
 
 class HardwareProvider 
@@ -46,10 +51,12 @@ class HardwareProvider
   void Drain(int State);
   void Sink(int State);
   void Lock(int State);
+  void HandleSoap(int State, int Soap);
   void EndProgram();
   
   private:
     Centipede * CS;
+    void MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC);
 };
 
 #endif

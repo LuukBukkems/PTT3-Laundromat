@@ -14,8 +14,11 @@ class Program
   int GetNrOfSteps();
   void AddStep(int StepTime, StepType Type);
   void Start();
+  void DoStep();
+  void End();
 
   private:
+  int Counter;
   Step * CurrentStep;
   Step * FirstStep;
   MyTimer * Timer;

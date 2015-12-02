@@ -97,6 +97,22 @@ void Step::ExecuteStep()
       case STEP_LOCK_OFF:
         Hardware->Lock(0);
       break;
+
+      case STEP_SOAP_1_ON:
+        Hardware->HandleSoap(1,1);
+      break;
+
+      case STEP_SOAP_1_OFF:
+        Hardware->HandleSoap(0,1);
+      break;
+
+      case STEP_SOAP_2_ON:
+        Hardware->HandleSoap(1,2);
+      break;
+
+      case STEP_SOAP_2_OFF:
+        Hardware->HandleSoap(0,2);
+      break;
     }
 }
 

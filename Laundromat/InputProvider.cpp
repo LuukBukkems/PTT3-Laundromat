@@ -31,6 +31,7 @@
   
   void InputProvider::UpdateInput()
   {
+    CS->digitalWrite(OUT_KEYSELECT, HIGH);
     if (CS->digitalRead(IN_IN3) && CS->digitalRead(IN_IN2) && CS->digitalRead(IN_IN1))
     {
       HandleCoins(0);
@@ -52,6 +53,12 @@
     }
   }
 
+  bool InputProvider::GetLock()
+  {
+    CS->digitalWrite(OUT_KEYSELECT, LOW);
+    return CS->digitalRead(IN_IN3);
+  }
+  
   void InputProvider::MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC)
   {
     CS->digitalWrite(OUT_STROBE,LOW);

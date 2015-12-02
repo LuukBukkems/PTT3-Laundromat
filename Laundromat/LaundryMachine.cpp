@@ -5,13 +5,32 @@
 #include <stddef.h>
 
 LaundryMachine::LaundryMachine() : Machine()
-{ }
-
-void LaundryMachine::Run(Program * selectedProgram)
 {
-  SelectedProgram = selectedProgram;
-  selectedProgram->Start();
+  Running = false; 
+} 
+
+void LaundryMachine::SelectProgram(Program * selectedProgram)
+{
+    SelectedProgram = selectedProgram;
+}
+void LaundryMachine::Run()
+{
+  if(!Running)
+  {
+    SelectedProgram->Start();
+    Running = true;
+  }
+  
+  else if(Running)
+  {
+     SelectedProgram->DoStep();
+  }
 }
 
+void LaundryMachine::Stop()
+{
+  Running = false;
+  SelectedProgram->End();
+}
 
 

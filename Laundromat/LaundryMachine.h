@@ -9,10 +9,13 @@ class LaundryMachine : public Machine
 {
   public:
   LaundryMachine();
-  void Run(Program * selectedProgram);
+  void SelectProgram(Program * selectedProgram);
+  void Run();
+  void Stop();
   
   private:
   Program * SelectedProgram;
+  bool Running;
 };
 
 #endif

@@ -9,6 +9,7 @@ Program::Program(HardwareProvider * hardware): Hardware(hardware)
  FirstStep = NULL;
  CurrentStep = FirstStep;
  Timer = new MyTimer();
+ Counter = 1;
 }
 
 Step * Program::GetCurrentStep()
@@ -62,27 +63,40 @@ void Program::AddStep(int StepTime, StepType Type)
 void Program::Start()
 {
   CurrentStep = FirstStep;
-  Serial.println(GetNrOfSteps());
   int Counter = 1;
-
-  while(CurrentStep != NULL)
-  {
-    CurrentStep->ExecuteStep();
-        
-    Timer->NewTimer(CurrentStep->GetTime());
-
-    while(!Timer->PollTimer())
-    {
-      delay(10);
-    }
-    
-    CurrentStep = CurrentStep->GetNext();
-    
-    Serial.print("Last Step was : ");
-    Serial.println(Counter++);
-     
-  }
-  Serial.println("Done");
+  Timer->NewTimer(0);
 }
 
+void Program::DoStep()
+{
+  if(CurrentStep != NULL)
+  {
+    if(Timer->PollTimer())
+    {
+     CurrentStep = CurrentStep->GetNext();
+     if(CurrentStep != NULL)
+     {
+      CurrentStep->ExecuteStep();
+      Timer->NewTimer(CurrentStep->GetTime());
+     }
+    }
+    return;
+  }
+}
+
+void Program::End()
+{
+  if(CurrentStep != NULL)
+  {
+    if(CurrentStep->GetNext() != NULL)
+    {
+      while(CurrentStep->GetNext()->GetNext() != NULL)
+      {
+        CurrentStep = CurrentStep->GetNext();
+      }
+      Timer->NewTimer(0);
+      DoStep();
+    }
+  }
+}
 

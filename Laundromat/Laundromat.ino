@@ -9,7 +9,6 @@
 
 FunctionManager fcnmgr;
 
-
 HardwareProvider * Hardware;
 InputProvider * MyInput;
 
@@ -24,6 +23,7 @@ bool Running = false;
 
 void StartProgram(int program);
 void StopProgram(void);
+void GetInformationx(void);
 
 void setup() {
   
@@ -59,6 +59,8 @@ void loop()
   MyInput->UpdateInput();
   RigidSpectreNETSerialConnector.Read();
 }
+
+//************************ Init Programs ********************************//
 
 void InitProgA()
 {
@@ -174,11 +176,13 @@ void InitProgB()
   ProgramB->AddStep(0, STEP_PROGRAM_END);
 }
 
+//*************************************** Communication Setup and Fuctions ************************************************//
 
 void FunctionManagerSetup(void)
 {
     fcnmgr.AddFunction("StartProgram",  new Delegate1<void, int>(StartProgram));//one argument
-    fcnmgr.AddFunction("StopProgram",  new Delegate0<void>(StopProgram));//zero arguments
+    //fcnmgr.AddFunction("StopProgram",  new Delegate0<void>(StopProgram));//zero arguments
+    fcnmgr.AddFunction("GetInformationx",  new Delegate0<void>(GetInformationx));//zero arguments
 }
 
 void StartProgram(int program)
@@ -202,6 +206,29 @@ void StopProgram(void)
 {
   Laundry->Stop();
   Running = false;
+}
+
+void GetInformationx(void)
+{
+  MachineInformation * Mi;
+  Mi = Hardware->GetMi();
+  Serial.print("Speed :");
+  Serial.println(Mi->Speed);/*
+
+    Serial.print("Speed :");
+  Serial.println(Mi->Speed);
+
+    Serial.print("Rotation :");
+  Serial.println(Mi->Rotation);
+
+    Serial.print("Lock :");
+  Serial.println(Mi->Lock);
+
+    Serial.print("Sink :");
+  Serial.println(Mi->Sink);
+
+    Serial.print("Drain :");
+  Serial.println(Mi->Drain);*/
 }
 
 

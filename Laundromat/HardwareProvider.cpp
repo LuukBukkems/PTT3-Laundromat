@@ -49,6 +49,13 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   CS->digitalWrite(OUT_SINK, LOW);
   CS->digitalWrite(OUT_DRAIN, LOW);
   CS->digitalWrite(OUT_LOCK, LOW);
+
+  Mi->Speed = 0;
+  Mi->Rotation = false;
+  Mi->Lock = false;
+  Mi->Heat = false;
+  Mi->Sink = false;
+  Mi->Drain = false;
 }
 
 //--------------------------------------------------------------------------------------------//
@@ -60,11 +67,12 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Heat(int State)
   {
-   
+   //Mi->Heat = State;
   }
   
   void HardwareProvider::Speed(int State)
   {
+    //Mi->Speed = State;
     switch (State)
     {
       case 0:
@@ -91,6 +99,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Turn(int State)
   {
+    //Mi->Rotation = State;
     switch (State)
     {
       case 0:
@@ -105,6 +114,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Drain(int State)
   {
+    //Mi->Drain = State;
         switch (State)
     {
       case 0:
@@ -119,6 +129,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Sink(int State)
   {
+    //Mi->Sink = State;
         switch (State)
     {
       case 0:
@@ -133,6 +144,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
 
   void HardwareProvider::Lock(int State)
   {
+    //Mi->Lock = State;
        switch (State)
     {
       case 0:
@@ -184,7 +196,10 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
     delay(80);
   }
 
-
+  MachineInformation * HardwareProvider::GetMi()
+  {
+    return Mi;
+  }
 
 
 

@@ -39,11 +39,20 @@ typedef enum StepType
   STEP_SOAP_2_OFF
 };
 
+struct MachineInformation
+{
+  int Speed;
+  bool Rotation;
+  bool Lock;
+  bool Heat;
+  bool Sink;
+  bool Drain;
+};
+
 class HardwareProvider 
 {
   public:
   HardwareProvider(Centipede * cs);
-
   void Fill(int State);
   void Heat(int State);
   void Speed(int State);
@@ -53,10 +62,13 @@ class HardwareProvider
   void Lock(int State);
   void HandleSoap(int State, int Soap);
   void EndProgram();
+
+  MachineInformation * GetMi();
   
   private:
-    Centipede * CS;
-    void MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC);
+  MachineInformation * Mi;
+  Centipede * CS;
+  void MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC);
 };
 
 #endif

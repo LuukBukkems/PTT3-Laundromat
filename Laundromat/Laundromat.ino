@@ -2,17 +2,22 @@
 #include <Wire.h>
 
 #include <RigidSpectreNETConnector.h>
-FunctionManager fcnmgr;
 
 #include "Machine.h";
 #include "LaundryMachine.h";
 #include "InputProvider.h";
 
+FunctionManager fcnmgr;
+
+
+HardwareProvider * Hardware;
 InputProvider * MyInput;
+
 LaundryMachine * Laundry;
+
 Program * ProgramA;
 Program * ProgramB;
-HardwareProvider * Hardware;
+
 Centipede * CS;
 
 bool Running = false;

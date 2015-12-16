@@ -11,13 +11,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Laundromat
 TEMPLATE = app
 
+LIBS = -ldl
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    serverconnect.cpp
+    serverconnectwindow.cpp \
+    RigidSpectreNETConnector.cpp
 
 HEADERS  += mainwindow.h \
-    serverconnect.h
+    serverconnectwindow.h \
+    RigidSpectreNETConnector.h
 
 FORMS    += mainwindow.ui \
-    serverconnect.ui
+    serverconnectwindow.ui

@@ -6,12 +6,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(btnConnect, SIGNAL(click()), this, SLOT(openConnectionWindow());
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_elapsed()));
+    timer->start(1);//one millisecond
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_timer_elapsed()
+{
+   // qDebug() << "yes";
 }
 
 void MainWindow::on_btnEmStop_clicked()
@@ -36,6 +44,14 @@ void MainWindow::on_btnRemStart_clicked()
     //Send server message to start machine with selected program
 }
 
+void MainWindow::on_btnConnect_clicked()
+{
+    //Pre: A program must be selected OR Machine must not be running
+    //Send server message to start machine with selected program
+
+    openConnectionWindow();
+}
+
 void MainWindow::on_btnRemStop_clicked()
 {
     //Pre: Machine must be running
@@ -44,8 +60,11 @@ void MainWindow::on_btnRemStop_clicked()
 
 void MainWindow::openConnectionWindow()
 {
-    //Open Connection Window
-    connectionWindow = new NewWindow();
-    connectionWindow->show();
+    serverConnectWindow connectionwindow;
+    connectionwindow.setModal(true);
+
+    connectionwindow.setMainWindowHandle(this);
+
+    connectionwindow.exec();
 }
 

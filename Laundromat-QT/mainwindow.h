@@ -2,10 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <serverconnect.h>
+#include <serverconnectwindow.h>
+#include <QTimer>
+#include <QDebug>
+#include "RigidSpectreNETConnector.h"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -16,8 +19,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    Ui::MainWindow *ui;
+
 public slots:
     void openConnectionWindow();
+    void on_timer_elapsed();
 
 private slots:
     void on_btnEmStop_clicked();
@@ -26,17 +32,12 @@ private slots:
 
     void on_btnRefresh_clicked();
 
-    void on_pushButton_clicked();
-
     void on_btnConnect_clicked();
 
     void on_btnRemStart_clicked();
     
     void on_btnRemStop_clicked();
-    
-private:
-    Ui::MainWindow *ui;
-    Ui::serverConnect *connectionWindow;
+
 };
 
 #endif // MAINWINDOW_H

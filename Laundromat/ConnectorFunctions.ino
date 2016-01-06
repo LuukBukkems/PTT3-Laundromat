@@ -20,5 +20,6 @@ void ToggleLed(void)
     digitalWrite(13, state);
 }*/
 
-//(AStopProgram)
-//(AStartProgramI1)
+//(AServerAStopProgram)
+//(AServerAStartProgramI1)
+//(AServerAGetInformation)

@@ -62,6 +62,7 @@ class HardwareProvider
   void Lock(int State);
   void HandleSoap(int State, int Soap);
   void EndProgram();
+  void CheckHeat();
 
   MachineInformation * GetMi();
   
@@ -69,6 +70,7 @@ class HardwareProvider
   MachineInformation * Mi;
   Centipede * CS;
   void MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC);
+  int MyHeat;
 };
 
 #endif

@@ -42,12 +42,15 @@ void Step::ExecuteStep()
       break;
 
       case STEP_HEAT_COLD:
+        Hardware->Heat(0);
       break;
 
       case STEP_HEAT_MED:
+        Hardware->Heat(2);
       break;
 
       case STEP_HEAT_HOT:
+        Hardware->Heat(3);
       break;
 
       case STEP_SPEED_OFF:

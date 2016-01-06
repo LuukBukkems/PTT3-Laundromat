@@ -48,6 +48,9 @@ void setup() {
 
   InitProgA();
   InitProgB();
+/*
+        Laundry->SelectProgram(ProgramA);
+      Running = true;*/
 }
 
 void loop()
@@ -55,6 +58,7 @@ void loop()
   if(Running)
   {
     Laundry->Run();
+    Hardware->CheckHeat();
   }
   MyInput->UpdateInput();
   RigidSpectreNETSerialConnector.Read();
@@ -79,6 +83,7 @@ void InitProgA()
 
   //Init State and Soap
   ProgramA->AddStep(0, STEP_LOCK_ON);
+  ProgramA->AddStep(0, STEP_HEAT_MED);
   ProgramA->AddStep(10, STEP_DRAIN_ON);
   ProgramA->AddStep(0, STEP_DRAIN_OFF);
   ProgramA->AddStep(0, STEP_SOAP_2_ON);
@@ -94,6 +99,7 @@ void InitProgA()
   ProgramA->AddStep(10, STEP_SINK_ON);
   ProgramA->AddStep(0, STEP_SINK_OFF);
   //------- Init Part 2
+  ProgramA->AddStep(0, STEP_HEAT_COLD);
   ProgramA->AddStep(10, STEP_DRAIN_ON);
   ProgramA->AddStep(0, STEP_DRAIN_OFF);
   ProgramA->AddStep(0, STEP_SPEED_MED);
@@ -123,6 +129,7 @@ void InitProgB()
 {    
   //Prewash
   ProgramB->AddStep(0, STEP_LOCK_ON);
+  ProgramB->AddStep(0, STEP_HEAT_MED);
   ProgramB->AddStep(10, STEP_DRAIN_ON);
   ProgramB->AddStep(0, STEP_DRAIN_OFF);
   ProgramB->AddStep(0, STEP_SOAP_1_ON);
@@ -151,6 +158,7 @@ void InitProgB()
   ProgramB->AddStep(10, STEP_SINK_ON);
   ProgramB->AddStep(0, STEP_SINK_OFF);
   //------- Init Part 2
+  ProgramB->AddStep(0, STEP_HEAT_COLD);
   ProgramB->AddStep(10, STEP_DRAIN_ON);
   ProgramB->AddStep(0, STEP_DRAIN_OFF);
   ProgramB->AddStep(0, STEP_SPEED_MED);
@@ -182,7 +190,7 @@ void FunctionManagerSetup(void)
 {
     fcnmgr.AddFunction("StartProgram",  new Delegate1<void, int>(StartProgram));//one argument
     //fcnmgr.AddFunction("StopProgram",  new Delegate0<void>(StopProgram));//zero arguments
-    fcnmgr.AddFunction("GetInformationx",  new Delegate0<void>(GetInformationx));//zero arguments
+    fcnmgr.AddFunction("GetInformation",  new Delegate0<void>(GetInformation));//zero arguments
 }
 
 void StartProgram(int program)
@@ -208,13 +216,20 @@ void StopProgram(void)
   Running = false;
 }
 
-void GetInformationx(void)
+void GetInformation(void)
 {
   MachineInformation * Mi;
   Mi = Hardware->GetMi();
-  Serial.print("Speed :");
-  Serial.println(Mi->Speed);/*
+  
+  CommunicationObject data;
 
+  data.AddDataIndex(new CommunicationObjectType(clientname));
+  data.AddDataIndex(new CommunicationObjectType("#UpdateInformation"));
+  data.AddDataIndex(new CommunicationObjectType(Mi->Speed));
+  
+  RigidSpectreNETSerialConnector.Write(data);
+  
+  /*
     Serial.print("Speed :");
   Serial.println(Mi->Speed);
 
@@ -229,6 +244,7 @@ void GetInformationx(void)
 
     Serial.print("Drain :");
   Serial.println(Mi->Drain);*/
+  
 }
 
 

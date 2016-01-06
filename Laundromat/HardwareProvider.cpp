@@ -33,6 +33,10 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   {
     CS->pinMode(i, OUTPUT);
   }
+
+  CS->pinMode(IN_T2, INPUT);
+  CS->pinMode(IN_T1, INPUT);
+  
   CS->digitalWrite(OUT_GROUP2, LOW);
   CS->digitalWrite(OUT_GROUP1, LOW);
   CS->digitalWrite(OUT_STROBE, LOW);
@@ -56,6 +60,8 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   Mi->Heat = false;
   Mi->Sink = false;
   Mi->Drain = false;
+
+  MyHeat = 0;
 }
 
 //--------------------------------------------------------------------------------------------//
@@ -68,6 +74,28 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   void HardwareProvider::Heat(int State)
   {
    //Mi->Heat = State;
+      MyHeat = State;
+  }
+
+  void HardwareProvider::CheckHeat()
+  {
+    int TempHeat = 0;
+    if(CS->digitalRead(IN_T1))
+    {
+      TempHeat += 1;
+    }
+    if(CS->digitalRead(IN_T2))
+    {
+      TempHeat += 2;
+    }
+    if(TempHeat > MyHeat)
+    {
+      CS->digitalWrite(OUT_HEATER, HIGH);
+    }
+    else if(TempHeat < MyHeat)
+    {
+      CS->digitalWrite(OUT_HEATER, LOW);
+    }
   }
   
   void HardwareProvider::Speed(int State)
@@ -115,7 +143,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   void HardwareProvider::Drain(int State)
   {
     //Mi->Drain = State;
-        switch (State)
+    switch (State)
     {
       case 0:
         CS->digitalWrite(OUT_DRAIN, LOW);
@@ -165,6 +193,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
     HandleSoap(0,1);
     HandleSoap(0,2);
     Lock(0);
+    Heat(0);
   }
 
   void HardwareProvider::HandleSoap(int State, int Soap)

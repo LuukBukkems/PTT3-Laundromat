@@ -1,7 +1,7 @@
 #ifndef LAUNDRYMACHINE_H
 #define LAUNDRYMACHINE_H
 
-#include "Machine.h";
+#include "Machine.h"
 
 class Program;
 

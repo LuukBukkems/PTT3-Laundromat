@@ -1,7 +1,7 @@
-#include "Program.h";
+#include "Program.h"
 #include "MyTimer.h"
 
-#include <Arduino.h>;
+#include <Arduino.h>
 #include <stddef.h>
 
 Program::Program(HardwareProvider * hardware): Hardware(hardware) 

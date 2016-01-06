@@ -16,6 +16,7 @@ LaundryMachine * Laundry;
 
 Program * ProgramA;
 Program * ProgramB;
+Program * ProgramC;
 
 Centipede * CS;
 
@@ -48,6 +49,7 @@ void setup() {
 
   InitProgA();
   InitProgB();
+  //InitProgC();
 /*
         Laundry->SelectProgram(ProgramA);
       Running = true;*/
@@ -55,13 +57,15 @@ void setup() {
 
 void loop()
 {   
-  if(Running)
-  {
-    Laundry->Run();
-    Hardware->CheckHeat();
-  }
-  MyInput->UpdateInput();
-  RigidSpectreNETSerialConnector.Read();
+    if(Running)
+    {
+      Laundry->Run();
+      Hardware->CheckHeat();
+    }
+  
+    MyInput->UpdateInput();
+  
+    RigidSpectreNETSerialConnector.Read();
 }
 
 //************************ Init Programs ********************************//
@@ -130,7 +134,7 @@ void InitProgB()
   //Prewash
   ProgramB->AddStep(0, STEP_LOCK_ON);
   ProgramB->AddStep(0, STEP_HEAT_MED);
-  ProgramB->AddStep(10, STEP_DRAIN_ON);
+  /*ProgramB->AddStep(10, STEP_DRAIN_ON);
   ProgramB->AddStep(0, STEP_DRAIN_OFF);
   ProgramB->AddStep(0, STEP_SOAP_1_ON);
   ProgramB->AddStep(0, STEP_SPEED_MED);
@@ -180,9 +184,78 @@ void InitProgB()
   ProgramB->AddStep(5, STEP_TURN_LEFT);
   ProgramB->AddStep(0, STEP_SPEED_OFF);
   ProgramB->AddStep(0, STEP_SINK_OFF);
-  //End Program
+  //End Program*/
   ProgramB->AddStep(0, STEP_PROGRAM_END);
 }
+
+/*
+void InitProgC()
+{
+  //Prewash
+  ProgramC->AddStep(0, STEP_LOCK_ON);
+  ProgramC->AddStep(0, STEP_HEAT_MED);
+  ProgramC->AddStep(10, STEP_DRAIN_ON);
+  ProgramC->AddStep(0, STEP_DRAIN_OFF);
+  ProgramC->AddStep(0, STEP_SOAP_1_ON);
+  ProgramC->AddStep(0, STEP_SPEED_MED);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(0, STEP_SOAP_1_OFF);
+  ProgramC->AddStep(0, STEP_SPEED_OFF);
+  ProgramC->AddStep(10,STEP_SINK_ON);
+  ProgramC->AddStep(0, STEP_SINK_OFF);
+
+  //Init State and Soap
+  ProgramC->AddStep(0, STEP_LOCK_ON);
+  ProgramC->AddStep(0, STEP_HEAT_HOT);
+  ProgramC->AddStep(20, STEP_DRAIN_ON);
+  ProgramC->AddStep(0, STEP_DRAIN_OFF);
+  ProgramC->AddStep(0, STEP_SOAP_2_ON);
+  ProgramC->AddStep(0, STEP_SPEED_MED);
+  //Turn Rotation
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  //Empty Sink
+  ProgramC->AddStep(0, STEP_SOAP_2_OFF);
+  ProgramC->AddStep(0, STEP_SPEED_OFF);
+  ProgramC->AddStep(20, STEP_SINK_ON);
+  ProgramC->AddStep(0, STEP_SINK_OFF);
+  //------- Init Part 2
+  ProgramC->AddStep(0, STEP_HEAT_COLD);
+  ProgramC->AddStep(10, STEP_DRAIN_ON);
+  ProgramC->AddStep(0, STEP_DRAIN_OFF);
+  ProgramC->AddStep(0, STEP_SPEED_MED);
+  //Start Rotating
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  ProgramC->AddStep(10, STEP_TURN_RIGHT);
+  ProgramC->AddStep(10, STEP_TURN_LEFT);
+  //Empty Sink
+  ProgramC->AddStep(0, STEP_SPEED_OFF);
+  ProgramC->AddStep(0, STEP_SINK_ON);
+  //------ Part 3
+  ProgramC->AddStep(0, STEP_SPEED_HIGH);
+  ProgramC->AddStep(5, STEP_TURN_RIGHT);
+  ProgramC->AddStep(5, STEP_TURN_LEFT);
+  ProgramC->AddStep(5, STEP_TURN_RIGHT);
+  ProgramC->AddStep(5, STEP_TURN_LEFT);
+  ProgramC->AddStep(5, STEP_TURN_RIGHT);
+  ProgramC->AddStep(5, STEP_TURN_LEFT);
+  ProgramC->AddStep(0, STEP_SPEED_OFF);
+  ProgramC->AddStep(0, STEP_SINK_OFF);
+  //End Program
+  ProgramC->AddStep(0, STEP_PROGRAM_END);
+}*/
 
 //*************************************** Communication Setup and Fuctions ************************************************//
 
@@ -204,9 +277,14 @@ void StartProgram(int program)
     }
     if(program == 2)
     {
-      Laundry->SelectProgram(ProgramA);
+      Laundry->SelectProgram(ProgramB);
       Running = true;
     }
+    /*if(program == 3)
+    {
+      Laundry->SelectProgram(ProgramC);
+      Running = true;
+    }*/
   }
 }
 
@@ -218,14 +296,14 @@ void StopProgram(void)
 
 void GetInformation(void)
 {
-  MachineInformation * Mi;
-  Mi = Hardware->GetMi();
+  //MachineInformation * Mi;
+  //Mi = Hardware->GetMi();
   
   CommunicationObject data;
 
-  data.AddDataIndex(new CommunicationObjectType(clientname));
+  data.AddDataIndex(new CommunicationObjectType(ClientName));
   data.AddDataIndex(new CommunicationObjectType("#UpdateInformation"));
-  data.AddDataIndex(new CommunicationObjectType(Mi->Speed));
+  //data.AddDataIndex(new CommunicationObjectType(Mi->Speed));
   
   RigidSpectreNETSerialConnector.Write(data);
   

@@ -3,7 +3,7 @@
 
 class Centipede;
 
-typedef enum StepType
+enum StepType
 {
   STEP_PROGRAM_END,
   

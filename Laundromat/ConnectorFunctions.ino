@@ -22,4 +22,4 @@ void ToggleLed(void)
 
 //(AServerAStopProgram)
 //(AServerAStartProgramI1)
-//(AServerAGetInformation)
+//(AServerAGetInformationI0)

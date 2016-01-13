@@ -54,14 +54,17 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   CS->digitalWrite(OUT_DRAIN, LOW);
   CS->digitalWrite(OUT_LOCK, LOW);
 
+  Mi = new MachineInformation();
   Mi->Speed = 0;
-  Mi->Rotation = false;
-  Mi->Lock = false;
-  Mi->Heat = false;
-  Mi->Sink = false;
-  Mi->Drain = false;
+  Mi->Rotation = 0;
+  Mi->Lock = 0;
+  Mi->Heat = 0;
+  Mi->Sink = 0;
+  Mi->Drain = 0;
 
   MyHeat = 0;
+
+  Done = false;
 }
 
 //--------------------------------------------------------------------------------------------//
@@ -73,7 +76,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Heat(int State)
   {
-   //Mi->Heat = State;
+      Mi->Heat = State;
       MyHeat = State;
   }
 
@@ -100,7 +103,8 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Speed(int State)
   {
-    //Mi->Speed = State;
+    Mi->Speed = State;
+      
     switch (State)
     {
       case 0:
@@ -127,7 +131,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Turn(int State)
   {
-    //Mi->Rotation = State;
+    Mi->Rotation = State;
     switch (State)
     {
       case 0:
@@ -142,7 +146,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Drain(int State)
   {
-    //Mi->Drain = State;
+    Mi->Drain = State;
     switch (State)
     {
       case 0:
@@ -157,7 +161,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
   
   void HardwareProvider::Sink(int State)
   {
-    //Mi->Sink = State;
+    Mi->Sink = State;
         switch (State)
     {
       case 0:
@@ -172,7 +176,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
 
   void HardwareProvider::Lock(int State)
   {
-    //Mi->Lock = State;
+    Mi->Lock = State;
        switch (State)
     {
       case 0:
@@ -194,6 +198,7 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
     HandleSoap(0,2);
     Lock(0);
     Heat(0);
+    Done = true;
   }
 
   void HardwareProvider::HandleSoap(int State, int Soap)
@@ -223,6 +228,16 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
     delay(80);
     CS->digitalWrite(OUT_STROBE,HIGH);
     delay(80);
+  }
+
+  bool HardwareProvider::GetDone()
+  {
+    return Done;
+  }
+
+  void HardwareProvider::SetDone(bool D)
+  {
+    Done = D; 
   }
 
   MachineInformation * HardwareProvider::GetMi()

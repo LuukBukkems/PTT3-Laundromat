@@ -42,11 +42,11 @@ enum StepType
 struct MachineInformation
 {
   int Speed;
-  bool Rotation;
-  bool Lock;
-  bool Heat;
-  bool Sink;
-  bool Drain;
+  int Rotation;
+  int Lock;
+  int Heat;
+  int Sink;
+  int Drain;
 };
 
 class HardwareProvider 
@@ -63,10 +63,13 @@ class HardwareProvider
   void HandleSoap(int State, int Soap);
   void EndProgram();
   void CheckHeat();
+  bool GetDone();
+  void SetDone(bool D);
 
   MachineInformation * GetMi();
   
   private:
+  bool Done;
   MachineInformation * Mi;
   Centipede * CS;
   void MultiplexOUT(bool GROUP1, bool GROUP2, bool DATAA, bool DATAB, bool DATAC);

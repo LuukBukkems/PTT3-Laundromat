@@ -3,9 +3,9 @@
 
 #include <RigidSpectreNETConnector.h>
 
-#include "Machine.h";
-#include "LaundryMachine.h";
-#include "InputProvider.h";
+#include "Machine.h"
+#include "LaundryMachine.h"
+#include "InputProvider.h"
 
 FunctionManager fcnmgr;
 
@@ -21,10 +21,11 @@ Program * ProgramC;
 Centipede * CS;
 
 bool Running = false;
+int SelectedProgram;
 
 void StartProgram(int program);
 void StopProgram(void);
-void GetInformationx(void);
+void GetInformation(int Request);
 
 void setup() {
   
@@ -37,9 +38,9 @@ void setup() {
 
   FunctionManagerSetup();
 
-  RigidSpectreNETSerialConnector.IdentifyName("LaundryMachine");
+  RigidSpectreNETSerialConnector.IdentifyName("#random");
 
-  RigidSpectreNETSerialConnector.IdentifyGroup("Arduino");
+  RigidSpectreNETSerialConnector.IdentifyGroup("LaundryMachines");
   
   Hardware = new HardwareProvider(CS);
   ProgramA = new Program(Hardware);
@@ -49,10 +50,9 @@ void setup() {
 
   InitProgA();
   InitProgB();
-  //InitProgC();
-/*
-        Laundry->SelectProgram(ProgramA);
-      Running = true;*/
+  InitProgC();
+
+  SelectedProgram = 0;
 }
 
 void loop()
@@ -61,6 +61,11 @@ void loop()
     {
       Laundry->Run();
       Hardware->CheckHeat();
+      if(Hardware->GetDone())
+      {
+        Running = false;
+        Laundry->Stop();
+      }
     }
   
     MyInput->UpdateInput();
@@ -134,7 +139,7 @@ void InitProgB()
   //Prewash
   ProgramB->AddStep(0, STEP_LOCK_ON);
   ProgramB->AddStep(0, STEP_HEAT_MED);
-  /*ProgramB->AddStep(10, STEP_DRAIN_ON);
+  ProgramB->AddStep(10, STEP_DRAIN_ON);
   ProgramB->AddStep(0, STEP_DRAIN_OFF);
   ProgramB->AddStep(0, STEP_SOAP_1_ON);
   ProgramB->AddStep(0, STEP_SPEED_MED);
@@ -184,11 +189,11 @@ void InitProgB()
   ProgramB->AddStep(5, STEP_TURN_LEFT);
   ProgramB->AddStep(0, STEP_SPEED_OFF);
   ProgramB->AddStep(0, STEP_SINK_OFF);
-  //End Program*/
+  //End Program
   ProgramB->AddStep(0, STEP_PROGRAM_END);
-}
+  }
 
-/*
+
 void InitProgC()
 {
   //Prewash
@@ -255,36 +260,40 @@ void InitProgC()
   ProgramC->AddStep(0, STEP_SINK_OFF);
   //End Program
   ProgramC->AddStep(0, STEP_PROGRAM_END);
-}*/
+}
 
 //*************************************** Communication Setup and Fuctions ************************************************//
 
 void FunctionManagerSetup(void)
 {
     fcnmgr.AddFunction("StartProgram",  new Delegate1<void, int>(StartProgram));//one argument
-    //fcnmgr.AddFunction("StopProgram",  new Delegate0<void>(StopProgram));//zero arguments
-    fcnmgr.AddFunction("GetInformation",  new Delegate0<void>(GetInformation));//zero arguments
+    fcnmgr.AddFunction("StopProgram",  new Delegate0<void>(StopProgram));//zero arguments
+    fcnmgr.AddFunction("GetInformation",  new Delegate1<void, int>(GetInformation));//zero arguments
 }
 
 void StartProgram(int program)
 {
   if(MyInput->GetLock())
   {
+    Hardware->SetDone(false);
     if(program == 1)
     {
+      SelectedProgram = 1;
       Laundry->SelectProgram(ProgramA);
       Running = true;
     }
     if(program == 2)
     {
+      SelectedProgram = 2;
       Laundry->SelectProgram(ProgramB);
       Running = true;
     }
-    /*if(program == 3)
+    if(program == 3)
     {
+      SelectedProgram = 3;
       Laundry->SelectProgram(ProgramC);
       Running = true;
-    }*/
+    }
   }
 }
 
@@ -294,34 +303,59 @@ void StopProgram(void)
   Running = false;
 }
 
-void GetInformation(void)
+void GetInformation(int Request)
 {
-  //MachineInformation * Mi;
-  //Mi = Hardware->GetMi();
+  
+  MachineInformation * Mi;
+  Mi = Hardware->GetMi();
   
   CommunicationObject data;
 
   data.AddDataIndex(new CommunicationObjectType(ClientName));
   data.AddDataIndex(new CommunicationObjectType("#UpdateInformation"));
-  //data.AddDataIndex(new CommunicationObjectType(Mi->Speed));
+  
+  data.AddDataIndex(new CommunicationObjectType("WashingMachine"));
+
+    int i = 0;
+    
+switch(Request)
+{
+  case 0:
+      data.AddDataIndex(new CommunicationObjectType("Speed :"));
+    data.AddDataIndex(new CommunicationObjectType(Mi->Speed));
+break;
+  case 1:
+      data.AddDataIndex(new CommunicationObjectType("Rotation :"));
+    data.AddDataIndex(new CommunicationObjectType(Mi->Rotation));
+break;
+  case 2:
+      data.AddDataIndex(new CommunicationObjectType("Lock :"));
+    data.AddDataIndex(new CommunicationObjectType(Mi->Lock));
+break;  
+  case 3:
+    data.AddDataIndex(new CommunicationObjectType("Sink :"));
+    data.AddDataIndex(new CommunicationObjectType(Mi->Sink));
+break;  
+  case 4:
+    data.AddDataIndex(new CommunicationObjectType("Drain :"));
+    data.AddDataIndex(new CommunicationObjectType(Mi->Drain));
+break;  
+  case 5:
+    data.AddDataIndex(new CommunicationObjectType("State :"));
+    if(Running)
+    {
+      i = 1;
+    }
+    data.AddDataIndex(new CommunicationObjectType(i));
+break;  
+  case 6:
+      data.AddDataIndex(new CommunicationObjectType("Program :"));
+      data.AddDataIndex(new CommunicationObjectType(SelectedProgram));
+break;
+
+}
   
   RigidSpectreNETSerialConnector.Write(data);
-  
-  /*
-    Serial.print("Speed :");
-  Serial.println(Mi->Speed);
-
-    Serial.print("Rotation :");
-  Serial.println(Mi->Rotation);
-
-    Serial.print("Lock :");
-  Serial.println(Mi->Lock);
-
-    Serial.print("Sink :");
-  Serial.println(Mi->Sink);
-
-    Serial.print("Drain :");
-  Serial.println(Mi->Drain);*/
   
 }
 

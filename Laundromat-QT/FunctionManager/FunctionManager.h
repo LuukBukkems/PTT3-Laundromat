@@ -16,11 +16,11 @@ class FunctionManager
 		void AddFunction(const char* functionname, DelegateBase* function);
 		
 		void* Call(const char* functionname);
-		void* Call(const char* functionname, TypeHelper d1);
-		void* Call(const char* functionname, TypeHelper d1, TypeHelper d2);
-		void* Call(const char* functionname, TypeHelper d1, TypeHelper d2, TypeHelper d3);
-		void* Call(const char* functionname, TypeHelper d1, TypeHelper d2, TypeHelper d3, TypeHelper d4);
-		void* Call(const char* functionname, TypeHelper d1, TypeHelper d2, TypeHelper d3, TypeHelper d4, TypeHelper d5);
+		void* Call(const char* functionname, TypeHelper& d1);
+		void* Call(const char* functionname, TypeHelper& d1, TypeHelper& d2);
+		void* Call(const char* functionname, TypeHelper& d1, TypeHelper& d2, TypeHelper& d3);
+		void* Call(const char* functionname, TypeHelper& d1, TypeHelper& d2, TypeHelper& d3, TypeHelper& d4);
+		void* Call(const char* functionname, TypeHelper& d1, TypeHelper& d2, TypeHelper& d3, TypeHelper& d4, TypeHelper& d5);
 	
 	private:
 	

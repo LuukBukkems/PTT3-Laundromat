@@ -1,11 +1,426 @@
 #ifndef _DELEGATED_H_INCLUDED
 #define _DELEGATED_H_INCLUDED
 
+class TypeHelper
+{
+	public:
+	
+		TypeHelper(const bool a)
+		{
+			bool* b = new bool(a);
+			k = b;
+			t = 'b';
+		};
+
+		TypeHelper(const char a)
+		{
+			char* s = (char*)malloc(sizeof(char));
+			s[0] = a;
+
+			k = (void*)s;
+			t = 'c';
+		};
+
+		TypeHelper(const float a)
+		{
+			float* s = (float*)malloc(sizeof(float));
+			*s = a;
+
+			k = (void*)s;
+			t = 'd';
+		};
+
+		TypeHelper(const double a)
+		{
+			double* s = (double*)malloc(sizeof(double));
+			*s = a;
+
+			k = (void*)s;
+			t = 'D';
+		};
+
+		TypeHelper(const unsigned int a)
+		{
+			unsigned int* s = (unsigned int*)malloc(sizeof(unsigned int));
+			*s = a;
+
+			k = (void*)s;
+			t = 'j';
+		};
+
+		TypeHelper(const unsigned long a)
+		{
+			unsigned long* s = (unsigned long*)malloc(sizeof(unsigned long));
+			*s = a;
+
+			k = (void*)s;
+			t = 'j';
+		};
+
+		TypeHelper(const unsigned long long a)
+		{
+			unsigned long long* s = (unsigned long long*)malloc(sizeof(unsigned long long));
+			*s = a;
+
+			k = (void*)s;
+			t = 'J';
+		};
+
+		TypeHelper(void* a)
+		{
+			k = NULL;
+			t = 'N';
+		};
+
+		TypeHelper(const char* a)
+		{
+			size_t size = (strlen((char*)a) + 1);
+			char* s = (char*)malloc(sizeof(char)*size);
+			memcpy(s, a, size);
+
+			k = (void*)s;
+			t = 'A';
+		};
+	
+		TypeHelper(const int* a)
+		{
+			unsigned int* s = (unsigned int*)malloc(sizeof(unsigned int));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'I';
+		};
+
+		TypeHelper(const long* a)
+		{
+			unsigned long* s = (unsigned long*)malloc(sizeof(unsigned long));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'I';
+		};
+
+		TypeHelper(const long long* a)
+		{
+			unsigned long long* s = (unsigned long long*)malloc(sizeof(unsigned long long));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'I';
+		};
+		
+		TypeHelper(const float* a)
+		{
+			float* s = (float*)malloc(sizeof(float));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'd';
+		};
+
+		
+		TypeHelper(const double* a)
+		{
+			double* s = (double*)malloc(sizeof(double));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'D';
+		};
+	
+		TypeHelper(const unsigned int* a)
+		{
+			unsigned int* s = (unsigned int*)malloc(sizeof(unsigned int));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'I';
+		};
+
+		TypeHelper(const unsigned long* a)
+		{
+			unsigned long* s = (unsigned long*)malloc(sizeof(unsigned long));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'j';
+		};
+		
+		TypeHelper(const unsigned long long* a)
+		{
+			unsigned long long* s = (unsigned long long*)malloc(sizeof(unsigned long long));
+			*s = *a;
+
+			k = (void*)s;
+			t = 'J';
+		};
+		
+		TypeHelper(const unsigned char* a)
+		{
+			size_t size = (strlen((char*)a) + 1);
+			char* s = (char*)malloc(sizeof(char)*size);
+			memcpy(s, a, size);
+
+			k = (void*)s;
+			t = 'A';
+		};
+		
+		TypeHelper(std::string* a)
+		{
+			std::string* s = new std::string(*a);
+			k = (void*)s;
+			t = 's';
+		};
+
+		static TypeHelper* CreateHelper(const void* a, char type)
+		{
+			switch(type)
+			{
+				case 's':
+				{
+					std::string s((char*)a);
+					return new TypeHelper(&s);
+					break;
+				}
+				case 'a':
+				{
+					return new TypeHelper((char*)a);
+					break;
+				}
+				case 'b':
+				{
+					return new TypeHelper(*(bool*)a);
+				}
+				case 'c':
+				{
+					return new TypeHelper(*(char*)a);
+				}
+				case 'I':
+				{
+					return new TypeHelper((int*)a);
+				}
+				case 'j':
+				{
+					return new TypeHelper((long*)a);
+				}
+			}
+
+			return NULL;
+		};
+
+		~TypeHelper()
+		{
+			switch(t)
+			{
+				case 'A':
+				case 'c':
+				{
+					delete (char*)k;
+					break;
+				}
+				case 'I':
+				{
+					delete (unsigned int*)k;
+					break;
+				}
+				case 'j':
+				{
+					delete (unsigned long*)k;
+					break;
+				}
+				case 'J':
+				{
+					delete (unsigned long long*)k;
+					break;
+				}
+				case 'd':
+				{
+					delete (float*)k;
+					break;
+				}
+				case 'D':
+				{
+					delete (double*)k;
+					break;
+				}
+				case 's':
+				{
+					delete (std::string*)k;
+					break;
+				}
+				case 'b':
+				{
+					delete (bool*)k;
+					break;
+				}
+			}
+		};
+
+		operator std::string() const
+		{
+			switch(t)
+			{
+				case 'A':
+				case 'c':
+				{
+					return (char*)k;
+					break;
+				}
+				case 's':
+				{
+					return *((std::string*)k);
+					break;
+				}
+				case 'b':
+				{
+					return (*(bool*)k) ? "1" : "0";
+					break;
+				}
+				case 'I':
+				{
+					char *intStr = (char*)malloc(sizeof(char)*10);
+                                        snprintf(intStr, 10, "%d", *(int*)k);
+					std::string str(intStr);
+					delete intStr;
+
+					return str;
+					break;
+				}
+			}
+
+			return "";  //  Or whatever...
+		}
+
+		operator int() const
+		{
+			switch(t)
+			{
+				case 'c':
+				{
+					return ((char*)k)[0];
+					break;
+				}
+				case 'I':
+				{
+					return *((unsigned int*)k);
+					break;
+				}
+				case 'j':
+				{
+					return *((unsigned long*)k);
+					break;
+				}
+				case 'J':
+				{
+					return *((unsigned long long*)k);
+					break;
+				}
+				case 'd':
+				{
+					return (long long)*((float*)k);
+					break;
+				}
+				case 'D':
+				{
+					return (long long)*((double*)k);
+					break;
+				}
+				case 'b':
+				{
+					return (*(bool*)k) ? 1 : 0;
+					break;
+				}
+			}
+
+			return 0;
+		}
+
+		operator std::string*() const
+		{
+			switch(t)
+			{
+				case 's':
+				{
+					return ((std::string*)k);
+					break;
+				}
+			}
+
+			return NULL;  //  Or whatever...
+		}
+
+		operator const char*() const
+		{
+			switch(t)
+			{
+				case 'A':
+				case 'c':
+				{
+					return (const char*)k;
+					break;
+				}
+				case 's':
+				{
+					return ((std::string*)k)->c_str();
+					break;
+				}
+			}
+
+			return NULL;  //  Or whatever...
+		}
+
+		operator void*() const
+		{
+			return k;  //  Or whatever...
+		}
+
+		operator char() const
+		{
+			switch(t)
+			{
+				case 'A':
+				case 'c':
+				{
+					return ((char*)k)[0];
+					break;
+				}
+				case 's':
+				{
+					return (*(std::string*)k)[0];
+					break;
+				}
+				case 'b':
+				{
+					return (*(bool*)k) ? '1' : '0';
+					break;
+				}
+			}
+
+			return 0;  //  Or whatever...
+		}
+		
+		void* GetPtr(void) const
+		{
+			return k;
+		};
+
+		char GetType(void) const
+		{
+			return t;
+		};
+	
+	private:
+	
+		void* k;
+		char t;
+	
+};
+
 class DelegateBase
 {
 	public:
 	
-		void SetDataIndex(unsigned int index, void* data)
+		void SetDataIndex(unsigned int index, TypeHelper* data)
 		{			
 			if(index < argnum)
 			{
@@ -15,7 +430,7 @@ class DelegateBase
 		
 		virtual void* Call(void) const = 0;
 		
-		DelegateBase(unsigned int paramsize) : argnum(paramsize), dataptrs((void**)malloc(sizeof(void*)*paramsize))
+		DelegateBase(unsigned int paramsize) : argnum(paramsize), dataptrs((TypeHelper**)malloc(sizeof(TypeHelper*)*paramsize))
 		{
 			
 		}
@@ -29,7 +444,7 @@ class DelegateBase
 	protected:
 	
 		unsigned int argnum;
-		void** dataptrs;
+		TypeHelper** dataptrs;
 };
 
 template <typename Ret>
@@ -92,8 +507,9 @@ class Delegate0 : public DelegateBase
 	}
 	
 	void* Call(void) const
-	{		
+	{
 		callback_->invoke();
+		return 0;
 	}
      
     template <typename T, typename Method>
@@ -170,7 +586,8 @@ class Delegate1 : public DelegateBase
 	
 	void* Call(void) const
 	{		
-		callback_->invoke((Param0)*((Param0*)(dataptrs[0])));
+		callback_->invoke(*dataptrs[0]);
+		return 0;
 	}
      
     template <typename T, typename Method>
@@ -182,7 +599,7 @@ class Delegate1 : public DelegateBase
      
     Ret operator()(Param0 param0)
     {
-      return callback_->invoke(param0);
+      return Call(param0);
     }
 };
 
@@ -244,7 +661,8 @@ class Delegate2 : public DelegateBase
 	
 	void* Call(void) const
 	{		
-		callback_->invoke((Param0)*((Param0*)(dataptrs[0])), (Param1)*((Param1*)(dataptrs[1])));
+		callback_->invoke(*dataptrs[0], *dataptrs[1]);
+		return 0;
 	}
      
     template <typename T, typename Method>
@@ -256,7 +674,7 @@ class Delegate2 : public DelegateBase
      
     Ret operator()(Param0 param0, Param1 param1)
     {
-      return callback_->invoke(param0, param1);
+      return Call(param0, param1);
     }
 };
 
@@ -318,7 +736,8 @@ class Delegate3 : public DelegateBase
      
 	void* Call(void) const
 	{		
-		callback_->invoke((Param0)*((Param0*)(dataptrs[0])), (Param1)*((Param1*)(dataptrs[1])), (Param2)*((Param2*)(dataptrs[2])));
+		callback_->invoke(*dataptrs[0], *dataptrs[1], *dataptrs[2]);
+		return 0;
 	}
 	 
     template <typename T, typename Method>
@@ -397,7 +816,8 @@ class Delegate4 : public DelegateBase
 	
 	void* Call(void) const
 	{		
-		callback_->invoke((Param0)*((Param0*)(dataptrs[0])), (Param1)*((Param1*)(dataptrs[1])), (Param2)*((Param2*)(dataptrs[2])), (Param3)*((Param3*)(dataptrs[3])));
+		callback_->invoke(*dataptrs[0], *dataptrs[1], *dataptrs[2], *dataptrs[3]);
+		return 0;
 	}
      
     ~Delegate4(void) { delete callback_; }
@@ -474,7 +894,8 @@ class Delegate5 : public DelegateBase
 	
 	void* Call(void) const
 	{		
-		callback_->invoke((Param0)*((Param0*)(dataptrs[0])), (Param1)*((Param1*)(dataptrs[1])), (Param2)*((Param2*)(dataptrs[2])), (Param3)*((Param3*)(dataptrs[3])), (Param4)*((Param4*)(dataptrs[4])));
+		callback_->invoke(*dataptrs[0], *dataptrs[1], *dataptrs[2], *dataptrs[3], *dataptrs[4]);
+		return 0;
 	}
      
     template <typename T, typename Method>
@@ -486,133 +907,8 @@ class Delegate5 : public DelegateBase
      
     Ret operator()(Param0 param0, Param1 param1, Param2 param2, Param3 param3, Param4 param4)
     {
-      return callback_->invoke(param0, param1, param2, param3, param4);
+      return Call(param0, param1, param2, param3, param4);
     }
-};
-
-class TypeHelper
-{
-	public:
-	
-		TypeHelper(void* a)
-		{
-			k = (void*)a;
-		};
-	
-		TypeHelper(const int* a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const char& a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const int& a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const long& a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const long long& a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const float& a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const double& a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const double a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const long long a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const unsigned long long a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const unsigned char& a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const unsigned int& a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const unsigned long& a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const unsigned int* a)
-		{
-			k = (void*)&a;
-		};
-	
-		TypeHelper(const unsigned long* a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const unsigned long long* a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const unsigned char* a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const char a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(const char* a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(String* a)
-		{
-			k = (void*)&a;
-		};
-		
-		TypeHelper(String& a)
-		{
-			k = (void*)&a;
-		};
-		
-		void* GetPtr(void) const
-		{
-			return k;
-		};
-	
-	private:
-	
-		void* k;
-	
 };
 
 class Delegate
@@ -635,49 +931,49 @@ class Delegate
 			return (void*)ftncntr->Call();
 		};
 		
-		void* Call(TypeHelper d1) const
+		void* Call(TypeHelper &d1) const
 		{
-			ftncntr->SetDataIndex(0, d1.GetPtr());
+			ftncntr->SetDataIndex(0, &d1);
 			
-			return (void*)ftncntr->Call();
+			return ftncntr->Call();
 		};
 		
-		void* Call(TypeHelper d1, TypeHelper d2) const
+		void* Call(TypeHelper& d1, TypeHelper& d2) const
 		{
-			ftncntr->SetDataIndex(0, d1.GetPtr());
-			ftncntr->SetDataIndex(1, d2.GetPtr());
+			ftncntr->SetDataIndex(0, &d1);
+			ftncntr->SetDataIndex(1, &d2);
 			
-			return (void*)ftncntr->Call();
+			return ftncntr->Call();
 		};
 		
-		void* Call(TypeHelper d1, TypeHelper d2, TypeHelper d3) const
+		void* Call(TypeHelper& d1, TypeHelper& d2, TypeHelper& d3) const
 		{
-			ftncntr->SetDataIndex(0, d1.GetPtr());
-			ftncntr->SetDataIndex(1, d2.GetPtr());
-			ftncntr->SetDataIndex(2, d3.GetPtr());
+			ftncntr->SetDataIndex(0, &d1);
+			ftncntr->SetDataIndex(1, &d2);
+			ftncntr->SetDataIndex(2, &d3);
 			
-			return (void*)ftncntr->Call();
+			return ftncntr->Call();
 		};
 		
-		void* Call(TypeHelper d1, TypeHelper d2, TypeHelper d3, TypeHelper d4) const
+		void* Call(TypeHelper& d1, TypeHelper& d2, TypeHelper& d3, TypeHelper& d4) const
 		{
-			ftncntr->SetDataIndex(0, d1.GetPtr());
-			ftncntr->SetDataIndex(1, d2.GetPtr());
-			ftncntr->SetDataIndex(2, d3.GetPtr());
-			ftncntr->SetDataIndex(3, d4.GetPtr());
+			ftncntr->SetDataIndex(0, &d1);
+			ftncntr->SetDataIndex(1, &d2);
+			ftncntr->SetDataIndex(2, &d3);
+			ftncntr->SetDataIndex(3, &d4);
 			
-			return (void*)ftncntr->Call();
+			return ftncntr->Call();
 		};
 		
-		void* Call(TypeHelper d1, TypeHelper d2, TypeHelper d3, TypeHelper d4, TypeHelper d5) const
+		void* Call(TypeHelper& d1, TypeHelper& d2, TypeHelper& d3, TypeHelper& d4, TypeHelper& d5) const
 		{
-			ftncntr->SetDataIndex(0, d1.GetPtr());
-			ftncntr->SetDataIndex(1, d2.GetPtr());
-			ftncntr->SetDataIndex(2, d3.GetPtr());
-			ftncntr->SetDataIndex(3, d4.GetPtr());
-			ftncntr->SetDataIndex(4, d5.GetPtr());
+			ftncntr->SetDataIndex(0, &d1);
+			ftncntr->SetDataIndex(1, &d2);
+			ftncntr->SetDataIndex(2, &d3);
+			ftncntr->SetDataIndex(3, &d4);
+			ftncntr->SetDataIndex(4, &d5);
 			
-			return (void*)ftncntr->Call();
+			return ftncntr->Call();
 		};
 		
 		

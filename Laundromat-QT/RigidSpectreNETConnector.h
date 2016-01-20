@@ -27,6 +27,7 @@ class RigidSpectreNETConnector
 		virtual void Read(void) = 0;
 		
 		void SetProcessor(FunctionManager* manager);
+		FunctionManager* GetProcessor() const;
 		
 		void IdentifyName(const char* devicename);
 		void IdentifyGroup(const char* groupname);

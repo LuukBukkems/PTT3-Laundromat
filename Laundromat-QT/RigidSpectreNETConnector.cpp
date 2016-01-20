@@ -42,6 +42,11 @@ void RigidSpectreNETConnector::SetProcessor(FunctionManager* manager)
 	processor = manager;
 }
 
+FunctionManager* RigidSpectreNETConnector::GetProcessor() const
+{
+	return processor;
+}
+
 void RigidSpectreNETConnector::processMessage(char* text, CommunicationObject* message)
 {
 	if(strlen(text) > 0)
@@ -55,41 +60,145 @@ void RigidSpectreNETConnector::processMessage(char* text, CommunicationObject* m
 			}			
 			case 1:
 			{
-				processor->Call(text, (void*)message->GetRawDataIndex(0)->GetRawDataCopy());
+				TypeHelper* D1 = NULL;
+				switch(message->GetRawDataIndex(0)->GetType())
+				{
+					case 's':
+					case 'A':
+					{
+						D1 = new TypeHelper((char*)message->GetRawDataIndex(0)->GetRawDataPointer());
+						break;
+					}
+				}	  
+
+				processor->Call(text, *D1);
+
+				delete D1;
 				break;
 			}
 			
 			case 2:
 			{
-				processor->Call(text, (void*)message->GetRawDataIndex(0)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(1)->GetRawDataCopy());
-				break;
+                TypeHelper* D1 = NULL;
+                TypeHelper* D2 = NULL;
+
+                switch(message->GetRawDataIndex(0)->GetType())
+                {
+                    case 's':
+                    case 'A':
+                    {
+                        D1 = new TypeHelper((char*)message->GetRawDataIndex(0)->GetRawDataPointer());
+                        break;
+                    }
+                }
+
+                switch(message->GetRawDataIndex(1)->GetType())
+                {
+                    case 's':
+                    case 'A':
+                    {
+                        D2 = new TypeHelper((char*)message->GetRawDataIndex(1)->GetRawDataPointer());
+                        break;
+                    }
+                }
+
+				processor->Call(text, *D1,
+                *D2);
+
+				delete D1;
+                delete D2;
 			}
 			
 			case 3:
 			{
-				processor->Call(text, (void*)message->GetRawDataIndex(0)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(1)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(2)->GetRawDataCopy());
+                TypeHelper* D1 = NULL;
+                TypeHelper* D2 = NULL;
+                TypeHelper* D3 = NULL;
+
+				switch(message->GetRawDataIndex(0)->GetType())
+				{
+					case 's':
+					case 'A':
+					{
+						D1 = new TypeHelper((char*)message->GetRawDataIndex(0)->GetRawDataPointer());
+						break;
+					}
+				}	  
+
+                switch(message->GetRawDataIndex(1)->GetType())
+                {
+                    case 's':
+                    case 'A':
+                    {
+                        D2 = new TypeHelper((char*)message->GetRawDataIndex(1)->GetRawDataPointer());
+                        break;
+                    }
+                }
+
+                switch(message->GetRawDataIndex(2)->GetType())
+                {
+                    case 's':
+                    case 'A':
+                    {
+                        D3 = new TypeHelper((char*)message->GetRawDataIndex(2)->GetRawDataPointer());
+                        break;
+                    }
+                    case 'I':
+                    {
+                        D3 = new TypeHelper((int*)message->GetRawDataIndex(2)->GetRawDataPointer());
+                        break;
+                    }
+                }
+
+				processor->Call(text, *D1,
+                *D2,
+                *D3);
+
+				delete D1;
+                delete D2;
+                delete D3;
 				break;
 			}
 			
 			case 4:
 			{
-				processor->Call(text, (void*)message->GetRawDataIndex(0)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(1)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(2)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(3)->GetRawDataCopy());
+				TypeHelper* D1 = TypeHelper::CreateHelper(message->GetRawDataIndex(0)->GetRawDataPointer(), message->GetRawDataIndex(0)->GetType());
+				TypeHelper* D2 = TypeHelper::CreateHelper(message->GetRawDataIndex(1)->GetRawDataPointer(), message->GetRawDataIndex(1)->GetType());
+				TypeHelper* D3 = TypeHelper::CreateHelper(message->GetRawDataIndex(2)->GetRawDataPointer(), message->GetRawDataIndex(2)->GetType());
+				TypeHelper* D4 = TypeHelper::CreateHelper(message->GetRawDataIndex(3)->GetRawDataPointer(), message->GetRawDataIndex(3)->GetType());
+
+				processor->Call(text, *D1,
+				*D2,
+				*D3,
+				*D4);
+
+				delete D1;
+				delete D2;
+				delete D3;
+				delete D4;
 				break;
 			}
 			
 			case 5:
 			{
-				processor->Call(text, (void*)message->GetRawDataIndex(0)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(1)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(2)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(3)->GetRawDataCopy(),
-				(void*)message->GetRawDataIndex(4)->GetRawDataCopy());
+				TypeHelper* D1 = NULL;
+				switch(message->GetRawDataIndex(0)->GetType())
+				{
+					case 's':
+					case 'A':
+					{
+						D1 = new TypeHelper((char*)message->GetRawDataIndex(0)->GetRawDataPointer());
+						break;
+					}
+				}	  
+
+				processor->Call(text, *D1,
+				*D1,
+				*D1,
+				*D1,
+				*D1);
+
+				delete D1;
 				break;
 			}
 		}
@@ -172,7 +281,7 @@ void RigidSpectreNETConnector::identified(CommunicationObject* arguments)
 						if(v && strlen(groupname) > 0)
 						{
 							//std::cout << groupname << std::endl;
-
+							std::cout << address << ':' << port << " has identified that this client is part of group `" << groupname << '`' << std::endl;
 							//
 						}
 					}
@@ -296,6 +405,8 @@ size_t RigidSpectreNETTCPConnector::Write(CommunicationObject& data)
 	return socket->write ((void*)t, l.length());
 }
 
+#include <qdebug.h>
+
 void RigidSpectreNETTCPConnector::Read(void)
 {	
 	if(socket->waitUntilReady(true, 1))
@@ -316,12 +427,13 @@ void RigidSpectreNETTCPConnector::Read(void)
 				for(int i = (messages->size()-1); i >= 0; i--)
 				{		
 					CommunicationObject* message = (*messages)[i];
-				
-					if( message->GetSize() > 0)
-					{
+
+					if( message->GetSize() > 1)
+					{						
+						const CommunicationObjectType* sender = message->ClearDataIndex(0);
 						const CommunicationObjectType* data = message->ClearDataIndex(0);
-						
-						if(data->IsString())
+
+						if(sender->IsString() && data->IsString())
 						{
 							char* FID = (char*)data->GetRawDataPointer();
 

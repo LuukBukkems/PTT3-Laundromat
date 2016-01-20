@@ -35,8 +35,8 @@
 	
 	Delegate* FunctionManager::FunctionByName(const char* functionstrname) const
 	{
-		for(unsigned int s = (functionname.size()-1);s >= 0; s--)
-		{			
+		for(long s = (functionname.size()-1); s >= 0; s--)
+		{
 			if(strcmp(functionstrname, functionname[s])  == 0)
 			{
 				return (*functions)[s];
@@ -58,61 +58,64 @@ void* FunctionManager::Call(const char* functionname)
 	return NULL;
 }
 	
-void* FunctionManager::Call(const char* functionname, TypeHelper d1)
+void* FunctionManager::Call(const char* functionname, TypeHelper& d1)
 {
 	Delegate* f = FunctionByName(functionname);
 	
+	std::cout << "arg 1: " << f << " " << (char*)d1.GetPtr() << std::endl;
+	
 	if(f != NULL)
 	{
-		return f->Call(d1.GetPtr());
+		f->Call(d1);
+		//return;
 	}
 	
 	return NULL;
 }
 
-void* FunctionManager::Call(const char* functionname, TypeHelper d1, TypeHelper d2)
+void* FunctionManager::Call(const char* functionname, TypeHelper& d1, TypeHelper& d2)
 {
 	Delegate* f = FunctionByName(functionname);
 	
 	if(f != NULL)
 	{
-		return f->Call(d1.GetPtr(), d2.GetPtr());
+		return f->Call(d1, d2);
 	}
 	
 	return NULL;
 }
 
-void* FunctionManager::Call(const char* functionname, TypeHelper d1, TypeHelper d2, TypeHelper d3)
+void* FunctionManager::Call(const char* functionname, TypeHelper& d1, TypeHelper& d2, TypeHelper& d3)
 {
 	Delegate* f = FunctionByName(functionname);
 	
 	if(f != NULL)
 	{
-		return f->Call(d1.GetPtr(), d2.GetPtr(), d3.GetPtr());
+		return f->Call(d1, d2, d3);
 	}
 	
 	return NULL;
 }
 
-void* FunctionManager::Call(const char* functionname, TypeHelper d1, TypeHelper d2, TypeHelper d3, TypeHelper d4)
+void* FunctionManager::Call(const char* functionname, TypeHelper& d1, TypeHelper& d2, TypeHelper& d3, TypeHelper& d4)
 {
 	Delegate* f = FunctionByName(functionname);
 	
 	if(f != NULL)
 	{
-		return f->Call(d1.GetPtr(), d2.GetPtr(), d3.GetPtr(), d4.GetPtr());
+		return f->Call(d1, d2, d3, d4);
 	}
 	
 	return NULL;
 }
 
-void* FunctionManager::Call(const char* functionname, TypeHelper d1, TypeHelper d2, TypeHelper d3, TypeHelper d4, TypeHelper d5)
+void* FunctionManager::Call(const char* functionname, TypeHelper& d1, TypeHelper& d2, TypeHelper& d3, TypeHelper& d4, TypeHelper& d5)
 {
 	Delegate* f = FunctionByName(functionname);
 	
 	if(f != NULL)
 	{
-		return f->Call(d1.GetPtr(), d2.GetPtr(), d3.GetPtr(), d4.GetPtr(), d5.GetPtr());
+		return f->Call(d1, d2, d3, d4, d5);
 	}
 	
 	return NULL;

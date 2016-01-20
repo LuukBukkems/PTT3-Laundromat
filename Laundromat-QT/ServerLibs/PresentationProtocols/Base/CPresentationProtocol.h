@@ -26,6 +26,9 @@
 
 #include "../../CommunicationObject/CommunicationObject.h"
 
+
+long long my_atoll(char *instr);
+
 #ifndef _SSTREAM_
 	#include <string>
 #endif

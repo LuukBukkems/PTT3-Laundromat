@@ -2,16 +2,18 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <serverconnectwindow.h>
 #include <QTimer>
 #include <QDebug>
 #include "RigidSpectreNETConnector.h"
+
+#include "laundromatmachine.h"
 
 namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+
+class MainWindow : public QMainWindow, public FunctionManager
 {
     Q_OBJECT
 
@@ -20,24 +22,40 @@ public:
     ~MainWindow();
 
     Ui::MainWindow *ui;
+    static MainWindow* master;
 
-public slots:
-    void openConnectionWindow();
-    void on_timer_elapsed();
+    void MakeConnection(const QString& address, int number);
+
+    void UpdateInformation(std::string devicename, std::string parameter, int value);
 
 private slots:
+
+    void on_BTNConnect_clicked();
+
+    void on_QUIT_clicked();
+
+    void on_LISTConnectedMachines_currentTextChanged(const QString &currentText);
+
+    void on_BTNstart_clicked();
+
+    void on_BTNstop_clicked();
+
     void on_btnEmStop_clicked();
 
-    void on_btnSelect_clicked();
+private:
 
-    void on_btnRefresh_clicked();
+    RigidSpectreNETTCPConnector* connector;
 
-    void on_btnConnect_clicked();
+    QList<LaundromatMachine*> machines;
+    LaundromatMachine* currentMachine;
 
-    void on_btnRemStart_clicked();
-    
-    void on_btnRemStop_clicked();
+public slots:
+
+    void read();
+    void update();
 
 };
+
+void UpdateInformationBase(std::string devicename, std::string parameter, int value);
 
 #endif // MAINWINDOW_H

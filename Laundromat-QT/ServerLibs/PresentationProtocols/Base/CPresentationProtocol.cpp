@@ -18,6 +18,17 @@
 
 #include "CPresentationProtocol.h"
 
+long long my_atoll(char *instr)
+{
+  long long retval;
+
+  retval = 0;
+  for (; *instr; instr++) {
+    retval = 10*retval + (*instr - '0');
+  }
+  return retval;
+}
+
 CPresentationProtocol::CPresentationProtocol(void) :
 isWorking(false),
 inProgressComObj(NULL),
@@ -164,7 +175,12 @@ void CPresentationProtocol::ProcessBuffer(char type, std::string* buffer)
 			}
 			case 'J'://Long long
 			{
-				long long J1 = atoll(buffer->c_str());
+				#if defined(_WIN32)
+					long long J1 = my_atoll((char*)buffer->c_str());
+				#else
+					long long J1 = atoll(buffer->c_str());
+				#endif
+
 				inProgressComObj->AddDataIndex(new CommunicationObjectType(J1));
 				break;
 			}

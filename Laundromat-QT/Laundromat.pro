@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui testlib
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,12 +16,11 @@ LIBS = -ldl
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    serverconnectwindow.cpp \
-    RigidSpectreNETConnector.cpp
+    RigidSpectreNETConnector.cpp \
+    laundromatmachine.cpp
 
 HEADERS  += mainwindow.h \
-    serverconnectwindow.h \
-    RigidSpectreNETConnector.h
+    RigidSpectreNETConnector.h \
+    laundromatmachine.h
 
-FORMS    += mainwindow.ui \
-    serverconnectwindow.ui
+FORMS    += mainwindow.ui

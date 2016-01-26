@@ -21,6 +21,11 @@ int Step::GetTime()
   return Time;
 }
 
+StepType Step::GetType() const
+{
+    return Type;
+}
+
 void Step::ExecuteStep()
 {
     switch(Type)

@@ -9,6 +9,7 @@ class Step
   Step(HardwareProvider * hardware, StepType type, int MyTime);
   Step * GetNext();
   void SetNext(Step * nextStep);
+  StepType GetType() const;
   int GetTime();
   void ExecuteStep();
 

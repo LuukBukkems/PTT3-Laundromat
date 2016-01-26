@@ -88,15 +88,13 @@ void Program::End()
 {
   if(CurrentStep != NULL)
   {
-    if(CurrentStep->GetNext() != NULL)
-    {
-      while(CurrentStep->GetNext()->GetNext() != NULL)
+      while(CurrentStep->GetNext() != NULL && CurrentStep->GetNext()->GetType() != STEP_PROGRAM_END)
       {
-        CurrentStep = CurrentStep->GetNext();
+          CurrentStep = CurrentStep->GetNext();
       }
+      
       Timer->NewTimer(0);
       DoStep();
-    }
   }
 }
 

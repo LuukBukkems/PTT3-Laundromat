@@ -38,7 +38,7 @@ void setup() {
 
   FunctionManagerSetup();
 
-  RigidSpectreNETSerialConnector.IdentifyName("#random");
+  RigidSpectreNETSerialConnector.IdentifyName("wasmachine1");
 
   RigidSpectreNETSerialConnector.IdentifyGroup("LaundryMachines");
   
@@ -78,6 +78,7 @@ void loop()
 void InitProgA()
 {
   //Prewash
+  ProgramA->AddStep(0, STEP_SINK_OFF);
   ProgramA->AddStep(0, STEP_LOCK_ON);
   ProgramA->AddStep(10, STEP_DRAIN_ON);
   ProgramA->AddStep(0, STEP_DRAIN_OFF);
@@ -137,6 +138,7 @@ void InitProgA()
 void InitProgB()
 {    
   //Prewash
+  ProgramA->AddStep(0, STEP_SINK_OFF);
   ProgramB->AddStep(0, STEP_LOCK_ON);
   ProgramB->AddStep(0, STEP_HEAT_MED);
   ProgramB->AddStep(10, STEP_DRAIN_ON);
@@ -193,10 +195,10 @@ void InitProgB()
   ProgramB->AddStep(0, STEP_PROGRAM_END);
   }
 
-
 void InitProgC()
 {
   //Prewash
+  ProgramA->AddStep(0, STEP_SINK_OFF);
   ProgramC->AddStep(0, STEP_LOCK_ON);
   ProgramC->AddStep(0, STEP_HEAT_MED);
   ProgramC->AddStep(10, STEP_DRAIN_ON);
@@ -301,6 +303,15 @@ void StopProgram(void)
 {
   Laundry->Stop();
   Running = false;
+
+  CommunicationObject data;
+
+  data.AddDataIndex(new CommunicationObjectType(ClientName));
+
+  data.AddDataIndex(new CommunicationObjectType("Stopped"));
+
+  RigidSpectreNETSerialConnector.Write(data);
+  
 }
 
 void GetInformation(int Request)
@@ -312,7 +323,7 @@ void GetInformation(int Request)
   CommunicationObject data;
 
   data.AddDataIndex(new CommunicationObjectType(ClientName));
-  data.AddDataIndex(new CommunicationObjectType("#UpdateInformation"));
+  data.AddDataIndex(new CommunicationObjectType("UpdateInformation"));
   
   data.AddDataIndex(new CommunicationObjectType("WashingMachine"));
 

@@ -191,14 +191,16 @@ HardwareProvider::HardwareProvider(Centipede*  cs): CS(cs)
 
   void HardwareProvider::EndProgram()
   {
-    Sink(0);
+    Sink(1);
     Drain(0);
     Speed(3);
     HandleSoap(0,1);
     HandleSoap(0,2);
     Lock(0);
     Heat(0);
+    MyHeat = 0;
     Done = true;
+    Serial.println("EndProg Finished");
   }
 
   void HardwareProvider::HandleSoap(int State, int Soap)
